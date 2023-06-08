@@ -308,11 +308,12 @@ extraContainerVolumes: []
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  type: pvc
-  enabled: false
-  # storageClassName: default
+  retain: true
+  # type: pvc
+  enabled: true
+  storageClassName: "gp3"
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   size: 10Gi
   # annotations: {}
   finalizers:

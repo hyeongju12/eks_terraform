@@ -1,12 +1,12 @@
 resource "aws_s3_bucket" "dev-tfstate-bucket" {
-    bucket = "hjyoo-dev-tfstate-bucket-3"
+    bucket = "hjyoo-dev-tfstate-bucket-4"
 
     lifecycle {
         create_before_destroy = true
     }
 }
 
-resource "aws_s3_bucket_versioning" "dev-s3-versioning" {
+resource "aws_s3_bucket_versioning" "dev-s4-versioning" {
     bucket = aws_s3_bucket.dev-tfstate-bucket.id
     versioning_configuration {
         status = "Enabled"

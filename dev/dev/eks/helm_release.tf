@@ -37,7 +37,10 @@ resource "helm_release" "ingress-nginx" {
     repository = "https://kubernetes.github.io/ingress-nginx"
 
     values = [
-        "${file("ingress-nginx.yaml")}"
+        templatefile("${path.module}/values/ingress-nginx.yaml", {
+            subnet_ids = "${join(",", local.subnet_ids)}",
+            role_arn = "${aws_iam_role.EKSAccessCICD.arn}"
+        })    
     ]
 
     create_namespace = true
@@ -52,7 +55,34 @@ resource "helm_release" "argocd" {
     repository = "https://argoproj.github.io/argo-helm"
 
     values = [ 
-        templatefile("${path.module}/argo_values.yaml", {
+        templatefile("${path.module}/values/argo_values.yaml", {
+            subnet_ids = "${join(",", local.subnet_ids)}",
+            role_arn = "${aws_iam_role.EKSAccessCICD.arn}"
+        })
+    ]
+
+    # values = [
+    #     "${file("argo_values.yaml")}"
+    #     ]
+    
+    create_namespace = true
+    namespace = "argocd"
+
+    depends_on = [ aws_eks_node_group.node ]
+
+    # set {
+    #     name = "server.ingress.annotations\\.service\\.beta\\.kubernetes\\.io/aws-load-balancer-subnets"
+    #     value = "{${join(",", local.subnet_ids)}}"
+    # }
+}
+
+resource "helm_release" "signoz" {
+    chart = "signoz"
+    name = "signoz"
+    repository = "https://argoproj.github.io/argo-helm"
+
+    values = [ 
+        templatefile("${path.module}/values/argo_values.yaml", {
             subnet_ids = "${join(",", local.subnet_ids)}",
             role_arn = "${aws_iam_role.EKSAccessCICD.arn}"
         })

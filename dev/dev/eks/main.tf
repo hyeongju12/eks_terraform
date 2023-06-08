@@ -164,14 +164,14 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSClusterAutoscalerPolicy" {
 # }
 resource "aws_launch_configuration" "eks_launch_conf" {
     image_id = "ami-06e46074ae430fba6"
-    instance_type = "t3.medium"
+    instance_type = "t2.small"
 
     security_groups = [ data.terraform_remote_state.network-config.outputs.dev-ssh-allow-sg ]
 }
 
 resource "aws_autoscaling_group" "eks_asg" {
-    max_size = 5
-    min_size = 2
+    max_size = 3
+    min_size = 1
     launch_configuration = aws_launch_configuration.eks_launch_conf.id
     
     vpc_zone_identifier = [data.terraform_remote_state.network-config.outputs.dev-subnet-1a-public-id, data.terraform_remote_state.network-config.outputs.dev-subnet-1c-public-id]
@@ -185,17 +185,17 @@ resource "aws_autoscaling_group" "eks_asg" {
 
 
 resource "aws_eks_node_group" "node" {
-    version = 1.24
-    instance_types = ["t3.medium"]
+    version = 1.27
+    instance_types = ["t2.small"]
     cluster_name    = aws_eks_cluster.aws_eks.name
     node_group_name = "EKS-WORKER-NODE"
     node_role_arn   = aws_iam_role.eks_nodes.arn
     subnet_ids      = [ data.terraform_remote_state.network-config.outputs.dev-subnet-1a-public-id, data.terraform_remote_state.network-config.outputs.dev-subnet-1c-public-id ]
 
     scaling_config {
-        desired_size = 2
-        max_size     = 5
-        min_size     = 2
+        desired_size = 1
+        max_size     = 3
+        min_size     = 1
     }
 
     tags = {
