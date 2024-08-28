@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Local .terraform directories
 **/.terraform/*
 
@@ -27,3 +28,13 @@ override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+=======
+## Local .terraform directories
+**/.terraform/*
+**/backup/*
+# .tfstate files
+*.tfstate
+*.tfstate.*
+.DS_Store
+.terraform*
+>>>>>>> 2018422 (First Commit)
