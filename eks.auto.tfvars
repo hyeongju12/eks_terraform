@@ -55,6 +55,14 @@ cluster_security_group_additional_rules = {
     type        = "ingress"
     cidr_blocks = ["10.0.0.0/16"]
   }
+  karpenter_webhook = {
+    description                = "Karpenter webhook"
+    protocol                   = "tcp"
+    from_port                  = 8443
+    to_port                    = 8443
+    type                       = "ingress"
+    source_node_security_group = true
+  }
 }
 
 #eks noodegroups 공용 변수
@@ -86,7 +94,7 @@ eks_managed_node_group_defaults = {
     AmazonSSMManagedInstanceCore       = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
     AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
     AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-    AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+    AmazonEKS_CNI_Policy               = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   }
 }
 eks_managed_node_groups = {
@@ -252,4 +260,4 @@ target_account = {
 
 
 enable_aws_load_balancer_controller = true
-enable_aws_karpenter                = true
+enable_aws_karpenter                = false

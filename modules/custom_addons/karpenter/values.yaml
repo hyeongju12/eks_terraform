@@ -162,9 +162,9 @@ logLevel: debug
 # -- Gloabl log encoding
 logEncoding: console
 # -- Cluster name.
-clusterName: ""
+clusterName: ${cluster_name}
 # -- Cluster endpoint.
-clusterEndpoint: ""
+clusterEndpoint: ${cluster_endpoint}
 aws:
   # -- The default instance profile to use when launching nodes on AWS
   defaultInstanceProfile: ""

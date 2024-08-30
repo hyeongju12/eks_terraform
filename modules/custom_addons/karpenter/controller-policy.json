@@ -1,0 +1,113 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "ssm:GetParameter",
+        "ec2:DescribeImages",
+        "ec2:RunInstances",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeLaunchTemplates",
+        "ec2:DescribeInstances",
+        "ec2:DescribeInstanceTypes",
+        "ec2:DescribeInstanceTypeOfferings",
+        "ec2:DescribeAvailabilityZones",
+        "ec2:DeleteLaunchTemplate",
+        "ec2:CreateTags",
+        "ec2:CreateLaunchTemplate",
+        "ec2:CreateFleet",
+        "ec2:DescribeSpotPriceHistory",
+        "pricing:GetProducts"
+      ],
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "Karpenter"
+    },
+    {
+      "Action": "ec2:TerminateInstances",
+      "Condition": {
+        "StringLike": {
+          "ec2:ResourceTag/karpenter.sh/nodepool": "*"
+        }
+      },
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "ConditionalEC2Termination"
+    },
+    {
+      "Action": "iam:PassRole",
+      "Effect": "Allow",
+      "Resource": "arn:${current_partition}:iam::${account_id}:role/KarpenterNodeRole-${cluster_name}",
+      "Sid": "PassNodeIAMRole"
+    },
+    {
+      "Action": "eks:DescribeCluster",
+      "Effect": "Allow",
+      "Resource": "arn:${current_partition}:eks:${region}:${account_id}:cluster/${cluster_name}",
+      "Sid": "EKSClusterEndpointLookup"
+    },
+    {
+      "Action": [
+        "iam:CreateInstanceProfile"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/kubernetes.io/cluster/${cluster_name}": "owned",
+          "aws:RequestTag/topology.kubernetes.io/region": "${region}"
+        },
+        "StringLike": {
+          "aws:RequestTag/karpenter.k8s.aws/ec2nodeclass": "*"
+        }
+      },
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "AllowScopedInstanceProfileCreationActions"
+    },
+    {
+      "Action": [
+        "iam:TagInstanceProfile"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/kubernetes.io/cluster/${cluster_name}": "owned",
+          "aws:RequestTag/topology.kubernetes.io/region": "${region}",
+          "aws:ResourceTag/kubernetes.io/cluster/${cluster_name}": "owned",
+          "aws:ResourceTag/topology.kubernetes.io/region": "${region}"
+        },
+        "StringLike": {
+          "aws:RequestTag/karpenter.k8s.aws/ec2nodeclass": "*",
+          "aws:ResourceTag/karpenter.k8s.aws/ec2nodeclass": "*"
+        }
+      },
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "AllowScopedInstanceProfileTagActions"
+    },
+    {
+      "Action": [
+        "iam:AddRoleToInstanceProfile",
+        "iam:RemoveRoleFromInstanceProfile",
+        "iam:DeleteInstanceProfile"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/kubernetes.io/cluster/${cluster_name}": "owned",
+          "aws:ResourceTag/topology.kubernetes.io/region": "${region}"
+        },
+        "StringLike": {
+          "aws:ResourceTag/karpenter.k8s.aws/ec2nodeclass": "*"
+        }
+      },
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "AllowScopedInstanceProfileActions"
+    },
+    {
+      "Action": "iam:GetInstanceProfile",
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "AllowInstanceProfileReadActions"
+    }
+  ],
+  "Version": "2012-10-17"
+}

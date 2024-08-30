@@ -11,3 +11,11 @@ output "cluster_addons" {
 output "ami_id" {
   value = data.aws_ami_ids.eks_opt.ids
 }
+
+output "cluster_endpoint" {
+  value = module.eks.cluster_endpoint
+}
+
+output "custom_addons_cluster_endpoint" {
+  value = module.custom_addons.cluster_endpoint
+}
