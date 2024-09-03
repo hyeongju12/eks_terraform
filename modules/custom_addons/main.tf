@@ -116,6 +116,11 @@ resource "helm_release" "karpenter" {
     depends_on = [aws_iam_role_policy_attachment.karpenter-controller]
 }
 
+# resource "kubernetes_manifest" "karpenter_nodepool_default" {
+#   count = var.enable_aws_karpenter ? 1 : 0
+#   manifest = yamldecode(file("${path.module}/karpenter/nodepools/aiml_nodepool_default.yaml"))
+# }
+
 resource "aws_iam_role" "karpenter" {
   count = var.enable_aws_karpenter ? 1 : 0
   name  = "karpenter-role"

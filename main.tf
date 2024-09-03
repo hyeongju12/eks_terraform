@@ -18,8 +18,9 @@ module "eks" {
   node_security_group_use_name_prefix          = var.node_security_group_use_name_prefix
   node_security_group_tags                     = var.node_security_group_tags
   node_security_group_enable_recommended_rules = var.node_security_group_enable_recommended_rules
+  
   # node_security_group_description = var.node_security_group_description
-  # node_security_group_additional_rules = var.node_security_group_additional_rules]
+  node_security_group_additional_rules = var.node_security_group_additional_rules
 
   #--- 필수Addons
   cluster_addons = local.cluster_addons

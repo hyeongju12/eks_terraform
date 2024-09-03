@@ -33,37 +33,49 @@ cluster_security_group_name            = "CTC-DEV-IO-SG-EKS-AP1"
 cluster_security_group_additional_rules = {
   cluster_egress_all = {
     cidr_blocks = ["0.0.0.0/0"]
+    source_cluster_security_group = true
     description = "cluster all egress"
     from_port   = 0
     protocol    = "-1"
     to_port     = 0
     type        = "egress"
   },
-  ingress_nodes_ports_tcp = {
-    description                = "To node 1025-65535"
-    from_port                  = 1025
-    protocol                   = "tcp"
-    source_node_security_group = true
-    to_port                    = 65535
-    type                       = "ingress"
-  },
-  bastion_sg = {
-    description = "bastion"
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
+  cluster_ingress_all = {
+    cidr_blocks = ["0.0.0.0/0"]
+    source_cluster_security_group = true
+    description = "cluster all egress"
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
     type        = "ingress"
-    cidr_blocks = ["10.0.0.0/16"]
-  }
-  karpenter_webhook = {
-    description                = "Karpenter webhook"
-    protocol                   = "tcp"
-    from_port                  = 8443
-    to_port                    = 8443
-    type                       = "ingress"
-    source_node_security_group = true
-  }
+  },
+  # ingress_nodes_ports_tcp = {
+  #   description                = "To node 1025-65535"
+  #   from_port                  = 1025
+  #   protocol                   = "tcp"
+  #   source_node_security_group = true
+  #   to_port                    = 65535
+  #   type                       = "ingress"
+  # },
+  # bastion_sg = {
+  #   description = "bastion"
+  #   protocol    = "tcp"
+  #   from_port   = 443
+  #   to_port     = 443
+  #   type        = "ingress"
+  #   cidr_blocks = ["10.0.0.0/16"]
+  # }
+  # karpenter_webhook = {
+  #   description                = "Karpenter webhook"
+  #   protocol                   = "tcp"
+  #   from_port                  = 8443
+  #   to_port                    = 8443
+  #   type                       = "ingress"
+  #   source_node_security_group = true
+  # }
 }
+
+
 
 #eks noodegroups 공용 변수
 eks_managed_node_group_defaults = {
@@ -101,8 +113,8 @@ eks_managed_node_groups = {
   core-nodes = {
     name                 = "core-nodes"
     create               = true
-    launch_template_name = "core-nodes-tpl"
-    instance_types       = ["t3.large"]
+    # launch_template_name = "core-nodes-tpl"
+    instance_types       = ["t3.2xlarge"]
     ami_id               = "ami-0b42fa8b1839302ca"
     desired_size         = 2
     max_size             = 3
@@ -123,6 +135,17 @@ eks_managed_node_groups = {
       Name = "core-nodes"
     }
   }
+}
+
+node_security_group_additional_rules = {
+    ingress_self_all = {
+      description = "Node to node all ports/protocols"
+      protocol    = "-1"
+      from_port   = 0
+      to_port     = 0
+      type        = "ingress"
+      self        = true
+    }
 }
 
 cluster_addons = {
@@ -260,4 +283,4 @@ target_account = {
 
 
 enable_aws_load_balancer_controller = true
-enable_aws_karpenter                = false
+enable_aws_karpenter                = true
