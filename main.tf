@@ -18,7 +18,7 @@ module "eks" {
   node_security_group_use_name_prefix          = var.node_security_group_use_name_prefix
   node_security_group_tags                     = var.node_security_group_tags
   node_security_group_enable_recommended_rules = var.node_security_group_enable_recommended_rules
-  
+
   # node_security_group_description = var.node_security_group_description
   node_security_group_additional_rules = var.node_security_group_additional_rules
 
@@ -110,4 +110,6 @@ module "custom_addons" {
 
   enable_aws_load_balancer_controller = var.enable_aws_load_balancer_controller
   enable_aws_karpenter                = var.enable_aws_karpenter
+  enable_ingress_nginx                = var.enable_ingress_nginx
+  enable_argocd                = var.enable_argocd
 }

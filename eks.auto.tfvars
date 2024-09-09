@@ -32,22 +32,22 @@ cluster_security_group_name            = "CTC-DEV-IO-SG-EKS-AP1"
 
 cluster_security_group_additional_rules = {
   cluster_egress_all = {
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks                   = ["0.0.0.0/0"]
     source_cluster_security_group = true
-    description = "cluster all egress"
-    from_port   = 0
-    protocol    = "-1"
-    to_port     = 0
-    type        = "egress"
+    description                   = "cluster all egress"
+    from_port                     = 0
+    protocol                      = "-1"
+    to_port                       = 0
+    type                          = "egress"
   },
   cluster_ingress_all = {
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks                   = ["0.0.0.0/0"]
     source_cluster_security_group = true
-    description = "cluster all egress"
-    from_port   = 0
-    protocol    = "-1"
-    to_port     = 0
-    type        = "ingress"
+    description                   = "cluster all egress"
+    from_port                     = 0
+    protocol                      = "-1"
+    to_port                       = 0
+    type                          = "ingress"
   },
   # ingress_nodes_ports_tcp = {
   #   description                = "To node 1025-65535"
@@ -111,14 +111,14 @@ eks_managed_node_group_defaults = {
 }
 eks_managed_node_groups = {
   core-nodes = {
-    name                 = "core-nodes"
-    create               = true
+    name   = "core-nodes"
+    create = true
     # launch_template_name = "core-nodes-tpl"
-    instance_types       = ["t3.2xlarge"]
-    ami_id               = "ami-0b42fa8b1839302ca"
-    desired_size         = 2
-    max_size             = 3
-    min_size             = 1
+    instance_types = ["t3.2xlarge"]
+    ami_id         = "ami-0b42fa8b1839302ca"
+    desired_size   = 2
+    max_size       = 3
+    min_size       = 1
     block_device_mappings = {
       xvda = {
         device_name = "/dev/xvda"
@@ -138,14 +138,14 @@ eks_managed_node_groups = {
 }
 
 node_security_group_additional_rules = {
-    ingress_self_all = {
-      description = "Node to node all ports/protocols"
-      protocol    = "-1"
-      from_port   = 0
-      to_port     = 0
-      type        = "ingress"
-      self        = true
-    }
+  ingress_self_all = {
+    description = "Node to node all ports/protocols"
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    type        = "ingress"
+    self        = true
+  }
 }
 
 cluster_addons = {
@@ -284,3 +284,5 @@ target_account = {
 
 enable_aws_load_balancer_controller = true
 enable_aws_karpenter                = true
+enable_ingress_nginx                = true
+enable_argocd                       = true

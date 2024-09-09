@@ -39,7 +39,17 @@ variable "enable_aws_karpenter" {
   default = false
 }
 
+variable "enable_ingress_nginx" {
+  type = bool
+  default = false
+}
+
 variable "core_nodegroup_name" {
   type = any
   description = "Core Node Group Name"
+}
+
+variable "enable_argocd" {
+  type = bool
+  default = false
 }
