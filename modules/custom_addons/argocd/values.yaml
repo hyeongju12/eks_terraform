@@ -2060,7 +2060,7 @@ server:
     # -- Server service labels
     labels: {}
     # -- Server service type
-    type: LoadBalancer
+    type: ClusterIP
     # -- Server service http port for NodePort service type (only if `server.service.type` is set to "NodePort")
     nodePortHttp: 30080
     # -- Server service https port for NodePort service type (only if `server.service.type` is set to "NodePort")
@@ -2077,7 +2077,7 @@ server:
     ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol
     servicePortHttpsAppProtocol: ""
     # -- The class of the load balancer implementation
-    loadBalancerClass: "alb"
+    loadBalancerClass: ""
     # -- LoadBalancer will get created with the IP specified in this field
     loadBalancerIP: ""
     # -- Source IP ranges to allow access to service from
@@ -2164,7 +2164,9 @@ server:
     annotations:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/subnets: subnet-0b0fea94c0ef70ef1,subnet-0c3902566337798fa,subnet-0582414a307425d7c
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTP": 443}]'
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/backend-protocol: HTTP
+      alb.ingress.kubernetes.io/backend-protocol-version: HTTP1
     # -- Defines which ingress controller will implement the resource
     ingressClassName: "alb"
 
@@ -2229,12 +2231,12 @@ server:
       # -- Backend protocol version for the AWS ALB gRPC service
       ## This tells AWS to send traffic from the ALB using gRPC.
       ## For more information: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html#health-check-settings
-      backendProtocolVersion: GRPC
+      backendProtocolVersion: HTTP1
       # -- Service type for the AWS ALB gRPC service
       ## Can be of type NodePort or ClusterIP depending on which mode you are running.
       ## Instance mode needs type NodePort, IP mode needs type ClusterIP
       ## Ref: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/how-it-works/#ingress-traffic
-      serviceType: NodePort
+      serviceType: LoadBalancer
 
     # Google specific options for Google Application Load Balancer
     # Applies only when `server.ingress.controller` is set to `gke`
