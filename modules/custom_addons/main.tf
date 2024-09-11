@@ -268,8 +268,31 @@ resource "helm_release" "argocd" {
   values = [
     templatefile("${path.module}/argocd/values.yaml",{
       load_balancer_sg_ids = var.load_balancer_sg_ids
+      persistent_volume_claim = kubernetes_persistent_volume_claim.argocd_pvc.metadata.0.name
     })
   ]
+}
+
+resource "kubernetes_persistent_volume_claim" "argocd_pvc" {
+  metadata {
+    name = "argocd-pvc"
+    namespace = "argocd"
+
+    labels = {
+      app = "argocd"
+    }
+  }
+
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    storage_class_name = var.storage_class_name
+
+    resources {
+      requests = {
+        storage = "5Gi"
+      }
+    }
+  }
 }
 ##########################################################################################################################################################################
 ########################################################                        4. argocd                        #########################################################

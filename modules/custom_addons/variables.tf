@@ -34,6 +34,11 @@ variable "load_balancer_sg_ids" {
   type = string
 }
 
+variable "storage_class_name" {
+  description = "Storage Class Name"
+  type = string
+}
+
 variable "enable_aws_load_balancer_controller" {
   type = bool
   default = false

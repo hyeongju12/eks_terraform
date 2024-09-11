@@ -100,13 +100,14 @@ module "change_storage_class" {
 module "custom_addons" {
   source = "./modules/custom_addons"
 
-  cluster_name        = var.cluster_name
-  cluster_endpoint    = module.eks.cluster_endpoint
-  cluster_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  cluster_oidc_issuer = module.eks.oidc_provider
-  region              = var.region
-  vpc_id              = var.vpc_id
-  core_nodegroup_name = var.eks_managed_node_groups["core-nodes"]["name"]
+  cluster_name         = var.cluster_name
+  cluster_endpoint     = module.eks.cluster_endpoint
+  cluster_certificate  = base64decode(module.eks.cluster_certificate_authority_data)
+  cluster_oidc_issuer  = module.eks.oidc_provider
+  region               = var.region
+  vpc_id               = var.vpc_id
+  core_nodegroup_name  = var.eks_managed_node_groups["core-nodes"]["name"]
+  storage_class_name   = "gp3"
   load_balancer_sg_ids = aws_security_group.lb-sg.id
 
   enable_aws_load_balancer_controller = var.enable_aws_load_balancer_controller

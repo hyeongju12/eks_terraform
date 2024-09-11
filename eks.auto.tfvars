@@ -151,7 +151,7 @@ node_security_group_additional_rules = {
     protocol    = "-1"
     from_port   = 0
     to_port     = 0
-    cidr_block = "0.0.0.0/0"
+    cidr_block  = "0.0.0.0/0"
     type        = "ingress"
   }
 }

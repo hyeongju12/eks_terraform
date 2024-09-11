@@ -692,16 +692,16 @@ controller:
   #        name: custom-tools
 
   # -- Additional volumeMounts to the application controller main container
-  volumeMounts: []
-  #  - mountPath: /usr/local/bin/kubelogin
-  #    name: custom-tools
-  #    subPath: kubelogin
+  volumeMounts:
+   - mountPath: /usr/local/bin/kubelogin
+     name: custom-tools
+     subPath: kubelogin
 
   # -- Additional volumes to the application controller pod
-  volumes: []
+  volumes:
   #  - name: custom-tools
-  #    emptyDir: {}
-
+  #    persistentVolumeClaim:
+  #     claimName: ${persistent_volume_claim}
   ## Application controller emptyDir volumes
   emptyDir:
     # -- EmptyDir size limit for application controller
