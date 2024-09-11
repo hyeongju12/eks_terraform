@@ -29,6 +29,11 @@ variable "vpc_id" {
   type = string
 }
 
+variable "load_balancer_sg_ids" {
+  description = "loadbalancer Security Groups"
+  type = string
+}
+
 variable "enable_aws_load_balancer_controller" {
   type = bool
   default = false

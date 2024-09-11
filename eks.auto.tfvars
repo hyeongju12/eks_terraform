@@ -146,6 +146,14 @@ node_security_group_additional_rules = {
     type        = "ingress"
     self        = true
   }
+  ingress_all = {
+    description = "Node to node all ports/protocols"
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_block = "0.0.0.0/0"
+    type        = "ingress"
+  }
 }
 
 cluster_addons = {

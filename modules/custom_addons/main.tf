@@ -267,7 +267,7 @@ resource "helm_release" "argocd" {
 
   values = [
     templatefile("${path.module}/argocd/values.yaml",{
-
+      load_balancer_sg_ids = var.load_balancer_sg_ids
     })
   ]
 }

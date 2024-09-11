@@ -107,9 +107,20 @@ module "custom_addons" {
   region              = var.region
   vpc_id              = var.vpc_id
   core_nodegroup_name = var.eks_managed_node_groups["core-nodes"]["name"]
+  load_balancer_sg_ids = aws_security_group.lb-sg.id
 
   enable_aws_load_balancer_controller = var.enable_aws_load_balancer_controller
   enable_aws_karpenter                = var.enable_aws_karpenter
   enable_ingress_nginx                = var.enable_ingress_nginx
-  enable_argocd                = var.enable_argocd
+  enable_argocd                       = var.enable_argocd
+}
+
+resource "aws_security_group" "lb-sg" {
+  ingress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
 }

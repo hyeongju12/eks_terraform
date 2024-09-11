@@ -19,3 +19,7 @@ output "cluster_endpoint" {
 output "custom_addons_cluster_endpoint" {
   value = module.custom_addons.cluster_endpoint
 }
+
+output "lb-sg-id" {
+  value = aws_security_group.lb-sg.id
+}
