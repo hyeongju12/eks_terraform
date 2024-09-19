@@ -29,6 +29,16 @@ variable "vpc_id" {
   type = string
 }
 
+variable "load_balancer_sg_ids" {
+  description = "loadbalancer Security Groups"
+  type = string
+}
+
+variable "storage_class_name" {
+  description = "Storage Class Name"
+  type = string
+}
+
 variable "enable_aws_load_balancer_controller" {
   type = bool
   default = false
@@ -39,7 +49,17 @@ variable "enable_aws_karpenter" {
   default = false
 }
 
+variable "enable_ingress_nginx" {
+  type = bool
+  default = false
+}
+
 variable "core_nodegroup_name" {
   type = any
   description = "Core Node Group Name"
+}
+
+variable "enable_argocd" {
+  type = bool
+  default = false
 }

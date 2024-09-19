@@ -18,7 +18,7 @@ module "eks" {
   node_security_group_use_name_prefix          = var.node_security_group_use_name_prefix
   node_security_group_tags                     = var.node_security_group_tags
   node_security_group_enable_recommended_rules = var.node_security_group_enable_recommended_rules
-  
+
   # node_security_group_description = var.node_security_group_description
   node_security_group_additional_rules = var.node_security_group_additional_rules
 
@@ -100,14 +100,28 @@ module "change_storage_class" {
 module "custom_addons" {
   source = "./modules/custom_addons"
 
-  cluster_name        = var.cluster_name
-  cluster_endpoint    = module.eks.cluster_endpoint
-  cluster_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  cluster_oidc_issuer = module.eks.oidc_provider
-  region              = var.region
-  vpc_id              = var.vpc_id
-  core_nodegroup_name = var.eks_managed_node_groups["core-nodes"]["name"]
+  cluster_name         = var.cluster_name
+  cluster_endpoint     = module.eks.cluster_endpoint
+  cluster_certificate  = base64decode(module.eks.cluster_certificate_authority_data)
+  cluster_oidc_issuer  = module.eks.oidc_provider
+  region               = var.region
+  vpc_id               = var.vpc_id
+  core_nodegroup_name  = var.eks_managed_node_groups["core-nodes"]["name"]
+  storage_class_name   = "gp3"
+  load_balancer_sg_ids = aws_security_group.lb-sg.id
 
   enable_aws_load_balancer_controller = var.enable_aws_load_balancer_controller
   enable_aws_karpenter                = var.enable_aws_karpenter
+  enable_ingress_nginx                = var.enable_ingress_nginx
+  enable_argocd                       = var.enable_argocd
+}
+
+resource "aws_security_group" "lb-sg" {
+  ingress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
 }

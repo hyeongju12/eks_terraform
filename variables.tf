@@ -252,3 +252,13 @@ variable "enable_aws_karpenter" {
   type    = bool
   default = false
 }
+
+variable "enable_ingress_nginx" {
+  type    = bool
+  default = false
+}
+
+variable "enable_argocd" {
+  type    = bool
+  default = false
+}
